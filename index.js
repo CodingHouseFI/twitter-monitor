@@ -4,11 +4,12 @@ import sendEmail from "./sendEmail";
 let [,, email, ...subjectWords] = process.argv;
 let subject = subjectWords.join(' ');
 
-var rl = readline.createInterface({
-  input: process.stdin
-});
+// var rl = readline.createInterface({
+//   input: process.stdin
+// });
 
-rl.question("", function(body) {
+// rl.question("", function(body) {
+  let body = '- Sent from my cron';
   sendEmail({to: email, subject, body})
     .then(() => {
       console.log("Email sent");
@@ -19,4 +20,4 @@ rl.question("", function(body) {
       console.error(actualError);
       process.exit();
     });
-});
+// });
