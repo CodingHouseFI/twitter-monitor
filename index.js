@@ -1,5 +1,5 @@
 var readline = require('readline');
-var exec = require('child_process').exec, child;
+import sendEmail from "./sendEmail";
 
 let [,, email, ...subjectWords] = process.argv;
 let subject = subjectWords.join(' ');
@@ -14,30 +14,9 @@ rl.question("", function(body) {
       console.log("Email sent");
       process.exit();
     })
-    .catch(() => {
+    .catch((actualError) => {
       console.error("Email was NOT sent, try again");
+      console.error(actualError);
       process.exit();
     });
 });
-
-let sendEmail = ({to, subject, body}) => {
-  let promise = new Promise((resolve, reject) => {
-    child = exec(`
-      curl -s --user '${process.env.MG_API_KEY}' \
-        https://api.mailgun.net/v3/sandboxbf6ec8ad5ef74cca9eca5deca6326d4b.mailgun.org/messageszzz \
-        -F from='Mailgun Sandbox <postmaster@sandboxbf6ec8ad5ef74cca9eca5deca6326d4b.mailgun.org>' \
-        -F to='${email}'\
-        -F subject='${subject}' \
-        -F text='${body}'
-    `,
-      function (error, stdout, stderr) {
-        if (error !== null) {
-          reject();
-        } else {
-          resolve();
-        }
-    });
-  });
-
-  return promise;
-};
